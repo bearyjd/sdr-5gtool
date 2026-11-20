@@ -164,13 +164,18 @@ not assumed authorization:
    over the physical bladeRF chain, confirm timing/gain settings hold up
    against real hardware.
 4. Once 2+ cells are available (real or simulated), explore handover.
+   srsUE does not support handover
+   (see https://docs.ocudu.org/tutorials/srsue), so this step needs a
+   different UE: OAI nrUE over ZMQ (unverified for handover) or a COTS UE
+   following the OCUDU intra-gNB handover tutorial.
 5. OTA: deferred until the phase-3 unlock condition above is met.
 
 ## Testing
 
 - Phase 1 is the primary test environment — every protocol flow (attach,
-  paging, AKA, handover once multi-cell) gets validated here first since
-  it's fast to iterate and requires no hardware.
+  paging, AKA) gets validated here first with srsUE since
+  it's fast to iterate and requires no hardware. Handover is not
+  validated with srsUE (unsupported); see learning-path step 4.
 - Phase 2 is a hardware-chain smoke test, not a protocol test: same flows,
   same expected outcomes as phase 1, just confirming the bladeRF path
   doesn't introduce timing/gain issues that break what already worked in
