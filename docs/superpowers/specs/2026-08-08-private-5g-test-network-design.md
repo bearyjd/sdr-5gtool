@@ -10,7 +10,7 @@ interference with any commercial carrier network.
 
 Hardware on hand: bladeRF 2.0 micro xA9 (one unit). Host: native Linux
 (bare metal), chosen specifically because Docker + bladeRF USB passthrough
-and srsRAN's real-time RF path are most reliable there (VMs add USB
+and OCUDU's real-time RF path are most reliable there (VMs add USB
 passthrough and scheduling jitter that hurts real-time RF timing).
 
 ## Scope & Phasing
@@ -39,15 +39,20 @@ Open5GS is the pick, for the 5G-SA-first path:
   require a different core.
 - MongoDB-backed subscriber store with a WebUI and REST API — this is the
   practical provisioning path for test IMSIs/keys (see below).
-- Actively maintained, large community, this is also what srsRAN Project's
-  own 5G SA documentation pairs against as the reference core. srsRAN does
-  not currently ship a competing core for 5G SA (srsEPC exists for legacy
+- Actively maintained, large community, this is also what the srsRAN Project's
+  (now OCUDU's) 5G SA documentation pairs against as the reference core.
+  OCUDU does not currently ship a competing core for 5G SA (srsEPC exists for legacy
   4G-only setups but isn't a live alternative once you're on the 5G SA
   path chosen here), so this isn't an either/or decision for this project.
 
-### RAN: srsRAN Project gNB
+### RAN: OCUDU gNB
 
-Driven by the bladeRF 2.0 micro xA9 through srsRAN's `bladerf` RF driver
+Note: the srsRAN Project repository was archived on 2026-06-01; its successor
+is OCUDU (gitlab.com/ocudu/ocudu, docs: docs.ocudu.org). Config and docker
+references below use the `ocudu/docker` layout.
+
+Driven by the bladeRF 2.0 micro xA9 through OCUDU's `bladerf` RF driver
+(UNVERIFIED in OCUDU; pending check, tracked as a separate finding)
 for real hardware (phases 2–3), or the `zmq` driver for simulation
 (phase 1) — same gNB codebase, different RF backend selected by config.
 
@@ -131,7 +136,7 @@ not assumed authorization:
 - One core stack (Open5GS: AMF/SMF/UPF/etc. + MongoDB + WebUI) that runs
   identically regardless of RAN/UE mode.
 - RAN and UE containers are parameterized by a single env var,
-  `RF_MODE=zmq|bladerf`, which selects which srsRAN config file is mounted
+  `RF_MODE=zmq|bladerf`, which selects which OCUDU config file is mounted
   in:
   - `zmq` — gNB and UE configs point at each other over `tcp://` sockets
     (ZeroMQ transport), phase 1.
